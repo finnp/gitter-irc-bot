@@ -1,0 +1,33 @@
+{
+  "name": "gitter-irc-bot",
+  "version": "1.0.0",
+  "description": "Bot that synchronises messages from a gitter room and an irc channel.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./bin.js"
+  },
+  "bin": {
+    "gitter-irc-bot": "./bin.js"
+  },
+  "author": "Finn Pauls",
+  "license": "MIT",
+  "dependencies": {
+    "JSONStream": "^0.10.0",
+    "irc": "^0.3.7",
+    "request": "^2.49.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finnp/gitter-irc-bot"
+  },
+  "keywords": [
+    "irc",
+    "gitter"
+  ],
+  "bugs": {
+    "url": "https://github.com/finnp/gitter-irc-bot/issues"
+  },
+  "homepage": "https://github.com/finnp/gitter-irc-bot"
+}
