@@ -1,0 +1,17 @@
+{
+  "name": "gitter-irc-bot",
+  "description": "A bot for synchronising messages from gitter and irc",
+  "repository": "https://github.com/finnp/gitter-irc-bot",
+  "keywords": [
+    "gitter",
+    "irc",
+    "synchronization",
+    "bot"
+  ],
+  "env": {
+    "GITTERBOT_APIKEY": "get it from https://developer.gitter.im/apps",
+    "GITTERBOT_GITTER_ROOM": "",
+    "GITTERBOT_IRC_CHANNEL": "",
+    "GITTERBOT_IRC_NICK": ""
+  }
+}

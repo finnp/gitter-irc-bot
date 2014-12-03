@@ -4,7 +4,7 @@ Bot that synchronises messages from a gitter room and an irc channel.
 
 Install with `npm install gitter-irc-bot`.
 
-# How to use
+## How to use
 
 You need to set the following env variables
 
@@ -14,3 +14,7 @@ You need to set the following env variables
 * `GITTERBOT_IRC_NICK` The IRC user nick of the bot
 
 Then start the bot with `npm start`, or if you install globally run `gitter-irc-bot`.
+
+## Deploy on heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/finnp/gitter-irc-bot.git)
