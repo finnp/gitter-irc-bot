@@ -12,4 +12,15 @@ if(!(opts.ircChannel &&  opts.gitterApiKey && opts.gitterRoom && opts.ircNick)) 
   process.exit()
 }
 
+var herokuURL = process.env.HEROKU_URL
+if(herokuURL) {
+  var request = require('request')
+  require('http').createServer(function (req, res) {
+    res.end('ping heroku\n')
+  }).listen(process.env.PORT)
+  setInterval(function () {
+      request(herokuURL).pipe(process.stdout)
+  }, 5 * 60 * 1000)
+}
+
 gitterBot(opts)
