@@ -42,7 +42,7 @@ module.exports = function (opts) {
             
         ircClient.on('message' + opts.ircChannel, function (from, message) {
           if(from === opts.ircNick) return
-          var text = '(' + from + ') ' + message
+          var text = '`' + from + '` ' + message
           console.log('irc:', text)
           // TODO: Handle post errors
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
