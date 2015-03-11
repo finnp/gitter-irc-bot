@@ -8,7 +8,7 @@ module.exports = function (opts) {
     'Authorization': 'Bearer ' + opts.gitterApiKey
   }
 
-  var ircClient = new irc.Client(opts.ircServer, opts.ircNick, {
+  var ircClient = new irc.Client(opts.ircServer || 'irc.freenode.net', opts.ircNick, {
     channels: [opts.ircChannel],
     autoConnect: false,
     retryCount: 20
