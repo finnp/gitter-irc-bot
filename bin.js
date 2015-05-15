@@ -8,7 +8,7 @@ var opts = {
   gitterRoom: process.env['GITTERBOT_GITTER_ROOM']
 }
 
-if(!(opts.ircServer && opts.ircChannel &&  opts.gitterApiKey && opts.gitterRoom && opts.ircNick)) {
+if(!(opts.ircChannel &&  opts.gitterApiKey && opts.gitterRoom && opts.ircNick)) {
   console.error('You need to set the config env variables (see readme.md)')
   process.exit()
 }
