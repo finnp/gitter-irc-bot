@@ -31,14 +31,27 @@ module.exports = function (opts) {
       request({url: "https://api.gitter.im/v1/user", headers: headers, json: true}, function (err ,res, json) {
         var gitterName = json[0].username
         console.log('Gitter bot', gitterName, 'on channel',  opts.gitterRoom, '(' + gitterRoomId + ')')
-        request({url: getGitterMessageUrl, headers: headers})
-          .pipe(JSONStream.parse())
+        var chatStream;
+
+        function gitterAttach() {
+          if (chatStream) {
+            console.log('Reattaching to gitter chat stream...');
+            chatStream.unpipe();
+            chatStream.removeAllListeners();
+          }
+          chatStream = request({url: getGitterMessageUrl, headers: headers})
+          chatStream.on('error', gitterAttach);
+          chatStream.on('end', gitterAttach);
+          chatStream.pipe(JSONStream.parse())
           .on('data', function (message) {
             if(message.fromUser.username === gitterName) return
             var text = '(' + message.fromUser.username + ') ' + message.text
             console.log('gitter:', text)
             ircClient.say(opts.ircChannel, text)
           })
+        }
+
+        gitterAttach();
             
         ircClient.on('message' + opts.ircChannel, function (from, message) {
           if(from === opts.ircNick) return
