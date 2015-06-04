@@ -1,5 +1,6 @@
 var irc = require('irc')
 var request = require('request')
+var xtend = require('xtend');
 var JSONStream = require('JSONStream')
 
 module.exports = function (opts) {  
@@ -8,11 +9,35 @@ module.exports = function (opts) {
     'Authorization': 'Bearer ' + opts.gitterApiKey
   }
 
-  var ircClient = new irc.Client(opts.ircServer || 'irc.freenode.net', opts.ircNick, {
+  var ircOpts = {
     channels: [opts.ircChannel],
     autoConnect: false,
     retryCount: 20
-  })
+  }
+
+  if (opts.ircSaslPassword) {
+    ircOpts = xtend(ircOpts, {
+      sasl: true,
+      userName: opts.ircSaslUsername || opts.ircNick,
+      password: opts.ircSaslPassword,
+    });
+    opts.ircSsl = true;  // sasl requires ssl
+  }
+
+  if (opts.ircSsl) {
+    ircOpts = xtend(ircOpts, {
+      port: opts.ircPort || 6697,
+      secure: true,
+      selfSigned: true,
+      certExpired: true,
+    });
+  }
+
+  if (opts.ircFloodProtection) {
+    ircOpts.floodProtection = true;
+  }
+
+  var ircClient = new irc.Client(opts.ircServer || 'irc.freenode.net', opts.ircNick, ircOpts);
 
   ircClient.on('error', function(message) {
     console.error('IRC Error:', message)

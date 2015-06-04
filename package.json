@@ -15,7 +15,8 @@
   "dependencies": {
     "JSONStream": "^0.10.0",
     "irc": "^0.3.7",
-    "request": "^2.49.0"
+    "request": "^2.49.0",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {},
   "repository": {

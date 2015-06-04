@@ -4,6 +4,11 @@ var opts = {
   ircServer: process.env['GITTERBOT_IRC_SERVER'],
   ircChannel: process.env['GITTERBOT_IRC_CHANNEL'],
   ircNick: process.env['GITTERBOT_IRC_NICK'],
+  ircSaslUsername: process.env['GITTERBOT_IRC_SASL_USERNAME'],
+  ircSaslPassword: process.env['GITTERBOT_IRC_SASL_PASSWORD'],
+  ircFloodProtection: process.env['GITTERBOT_IRC_FLOOD_PROTECTION'],
+  ircSsl: process.env['GITTERBOT_IRC_SSL'],
+  ircPort: process.env['GITTERBOT_IRC_PORT'],
   gitterApiKey: process.env['GITTERBOT_APIKEY'],
   gitterRoom: process.env['GITTERBOT_GITTER_ROOM']
 }
