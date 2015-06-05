@@ -1,5 +1,6 @@
 var irc = require('irc')
 var request = require('request')
+var xtend = require('xtend')
 var JSONStream = require('JSONStream')
 
 module.exports = function (opts) {  
@@ -8,11 +9,11 @@ module.exports = function (opts) {
     'Authorization': 'Bearer ' + opts.gitterApiKey
   }
 
-  var ircClient = new irc.Client(opts.ircServer || 'irc.freenode.net', opts.ircNick, {
+  var ircClient = new irc.Client(opts.ircServer || 'irc.freenode.net', opts.ircNick, xtend({
     channels: [opts.ircChannel],
     autoConnect: false,
     retryCount: 20
-  })
+  }, opts.ircOpts)
 
   ircClient.on('error', function(message) {
     console.error('IRC Error:', message)
