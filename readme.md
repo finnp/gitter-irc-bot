@@ -1,4 +1,5 @@
 # gitter-irc-bot
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 Bot that synchronises messages from a gitter room and an irc channel.
 
