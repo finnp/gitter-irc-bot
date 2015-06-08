@@ -5,6 +5,9 @@ Bot that synchronises messages from a gitter room and an irc channel.
 
 Install with `npm install gitter-irc-bot`.
 
+If you want to test this bot, go to [the gitter channel](https://gitter.im/finnp/gitter-irc-bot) and
+join `#gitterircbot` on Freenode.
+
 ## How to use
 
 You need to set the following env variables
