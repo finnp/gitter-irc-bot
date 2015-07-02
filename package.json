@@ -4,8 +4,8 @@
   "description": "Bot that synchronises messages from a gitter room and an irc channel.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./bin.js"
+    "start": "./bin.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
     "gitter-irc-bot": "./bin.js"
@@ -24,8 +24,8 @@
     "url": "https://github.com/finnp/gitter-irc-bot"
   },
   "keywords": [
-    "irc",
-    "gitter"
+    "gitter",
+    "irc"
   ],
   "bugs": {
     "url": "https://github.com/finnp/gitter-irc-bot/issues"
