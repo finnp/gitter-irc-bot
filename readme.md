@@ -12,7 +12,7 @@ join `#gitterircbot` on Freenode.
 
 You need to set the following env variables
 
-* `GITTERBOT_APIKEY`  Log in with your github/gitter bot [here](https://developer.gitter.im/apps) and take the `personal access token`. This shouldn't be your personal GitHub account, but a designated bot account.
+* `GITTERBOT_APIKEY`  Log in with your github/gitter bot [here](https://developer.gitter.im/apps) and take the `personal access token`. **Important:** This shouldn't be your personal GitHub account, but a designated bot account.
 * `GITTERBOT_GITTER_ROOM` The Gitter Room, e.g. `datproject/discussions`
 * `GITTERBOT_IRC_CHANNEL` IRC Channel name, e.g. `#dat`
 * `GITTERBOT_IRC_NICK` The IRC user nick of the bot
