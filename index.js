@@ -49,8 +49,19 @@ module.exports = function (opts) {
           chatStream.on('end', gitterAttach)
           chatStream.pipe(JSONStream.parse())
             .on('data', function (message) {
-              if (message.fromUser.username === gitterName) return
-              var text = '(' + message.fromUser.username + ') ' + message.text
+              var userName = message.fromUser.username
+              if (userName === gitterName) return
+
+              var lines = message.text.split('\n')
+              if (lines.length > 4) {
+                lines.splice(3)
+                lines.push('[full message: https://gitter.im/' + opts.gitterRoom + '?at=' + message.id + ']')
+              }
+
+              var text = lines.map(function (line) {
+                return '(' + userName + ') ' + line
+              }).join('\n')
+
               console.log('gitter:', text)
               ircClient.say(opts.ircChannel, text)
             })
