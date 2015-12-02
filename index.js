@@ -30,7 +30,7 @@ module.exports = function (opts) {
   console.log('Connecting to IRC..')
   ircClient.connect(function () {
     console.log('Connected to IRC, joined', opts.ircChannel)
-    request.post({url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
+    request.post({ url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
       if (err) return console.error(err)
       var gitterRoomId = json.id
       var getGitterMessageUrl = 'https://stream.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
@@ -73,9 +73,12 @@ module.exports = function (opts) {
           if (from === opts.ircNick) return
           var text = '`' + from + '` ' + message
           console.log('irc:', text)
-          // TODO: Handle post errors
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
-        // .pipe(process.stdout) // {"error":"An unknown error occurred"}
+        })
+        ircClient.on('action', function (from, to, message) {
+          if (to !== opts.ircChannel || from === opts.ircNick) return
+          var text = '— `' + from + '` ' + message
+          request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
       })
     })
