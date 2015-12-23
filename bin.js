@@ -20,6 +20,7 @@ var opts = {
   ircServer: process.env['GITTERBOT_IRC_SERVER'],
   ircChannel: process.env['GITTERBOT_IRC_CHANNEL'],
   ircNick: process.env['GITTERBOT_IRC_NICK'],
+  ircAdmin: process.env['GITTERBOT_IRC_ADMIN'],
   ircOpts: getIrcOpts(),
   gitterApiKey: process.env['GITTERBOT_APIKEY'],
   gitterRoom: process.env['GITTERBOT_GITTER_ROOM']

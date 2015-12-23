@@ -21,6 +21,11 @@ module.exports = function (opts) {
     ircOpts
   )
 
+  function log (message) {
+    console.error(message)
+    if (opts.ircAdmin) ircClient.say(opts.ircAdmin, message)
+  }
+
   ircClient.on('error', function (message) {
     console.error('IRC Error:', message)
   })
@@ -29,22 +34,22 @@ module.exports = function (opts) {
 
   console.log('Connecting to IRC..')
   ircClient.connect(function () {
-    console.log('Connected to IRC, joined', opts.ircChannel)
+    log('Connected to IRC, joined', opts.ircChannel)
     request.post({ url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
-      if (err) return console.error(err)
+      if (err) return log(err)
       var gitterRoomId = json.id
       var getGitterMessageUrl = 'https://stream.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
       var postGitterMessageUrl = 'https://api.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
 
       request({url: 'https://api.gitter.im/v1/user', headers: headers, json: true}, function (err, res, json) {
-        if (err) return console.error(err)
+        if (err) return log(err)
         var gitterName = json[0].username
-        console.log('Gitter bot', gitterName, 'on channel', opts.gitterRoom, '(' + gitterRoomId + ')')
+        log('Gitter bot', gitterName, 'on channel', opts.gitterRoom, '(' + gitterRoomId + ')')
         var chatStream
 
         function gitterAttach () {
           if (chatStream) {
-            console.log('Reattaching to gitter chat stream...')
+            log('Reattaching to gitter chat stream...')
             chatStream.abort()
             chatStream.removeAllListeners()
           }
