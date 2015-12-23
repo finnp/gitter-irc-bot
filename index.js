@@ -93,6 +93,7 @@ module.exports = function (opts) {
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('pm', function (from, message) {
+          if (from !== opts.ircAdmin) return ircClient.say('Your are not my master.')
           var commands = [
             'reattach gitter',
             'kill'
