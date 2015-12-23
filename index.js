@@ -34,7 +34,7 @@ module.exports = function (opts) {
 
   console.log('Connecting to IRC..')
   ircClient.connect(function () {
-    log('Connected to IRC, joined', opts.ircChannel)
+    log('Connected to IRC, joined ' + opts.ircChannel)
     request.post({ url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
       if (err) return log(err)
       var gitterRoomId = json.id
@@ -44,7 +44,7 @@ module.exports = function (opts) {
       request({url: 'https://api.gitter.im/v1/user', headers: headers, json: true}, function (err, res, json) {
         if (err) return log(err)
         var gitterName = json[0].username
-        log('Gitter bot', gitterName, 'on channel', opts.gitterRoom, '(' + gitterRoomId + ')')
+        log('Gitterbot ' + gitterName + ' on channel ' + opts.gitterRoom + '(' + gitterRoomId + ')')
         var chatStream
 
         function gitterAttach () {
