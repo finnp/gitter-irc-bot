@@ -80,6 +80,14 @@ module.exports = function (opts) {
           var text = '— `' + from + '` ' + message
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
+        ircClient.on('pm', function (from, message) {
+          if (message === 'reattach gitter') {
+            gitterAttach()
+            ircClient.say(from, 'I reattached gitter for you!')
+          } else {
+            ircClient.say(from, 'Hi!')
+          }
+        })
       })
     })
   })
