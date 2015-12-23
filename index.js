@@ -54,7 +54,10 @@ module.exports = function (opts) {
             chatStream.removeAllListeners()
           }
           chatStream = request({url: getGitterMessageUrl, headers: headers})
-          chatStream.on('error', gitterAttach)
+          chatStream.on('error', function (err) {
+            log(err.message)
+            gitterAttach()
+          })
           chatStream.on('end', gitterAttach)
           chatStream.pipe(JSONStream.parse())
             .on('data', function (message) {
@@ -90,11 +93,18 @@ module.exports = function (opts) {
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('pm', function (from, message) {
-          if (message === 'reattach gitter') {
+          var commands = [
+            'reattach gitter',
+            'kill'
+          ]
+          if (message === commands[0]) {
             gitterAttach()
             ircClient.say(from, 'I reattached gitter for you!')
+          } else if (message === commands[1]) {
+            ircClient.say(from, 'Shutting down systems...')
+            process.exit()
           } else {
-            ircClient.say(from, 'Hi!')
+            ircClient.say(from, 'Hi! I only understand: ' + commands.join(', '))
           }
         })
       })
