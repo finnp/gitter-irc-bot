@@ -43,7 +43,11 @@ module.exports = function (opts) {
         var chatStream
 
         function gitterAttach () {
-          if (chatStream) console.log('Reattaching to gitter chat stream...')
+          if (chatStream) {
+            console.log('Reattaching to gitter chat stream...')
+            chatStream.abort()
+            chatStream.removeAllListeners()
+          }
           chatStream = request({url: getGitterMessageUrl, headers: headers})
           chatStream.on('error', gitterAttach)
           chatStream.on('end', gitterAttach)
