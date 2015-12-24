@@ -55,7 +55,7 @@ module.exports = function (opts) {
           }
           chatStream = request({url: getGitterMessageUrl, headers: headers})
           chatStream.on('error', function (err) {
-            log(err.message)
+            log(err)
             gitterAttach()
           })
           chatStream.on('end', gitterAttach)
@@ -77,6 +77,10 @@ module.exports = function (opts) {
 
               console.log('gitter:', text)
               ircClient.say(opts.ircChannel, text)
+            })
+            .on('error', function (err) {
+              log(err)
+              gitterAttach()
             })
         }
 
