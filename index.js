@@ -61,6 +61,7 @@ module.exports = function (opts) {
           chatStream.on('end', gitterAttach)
           chatStream.pipe(JSONStream.parse())
             .on('data', function (message) {
+              if (!message.fromUser) return log(JSON.stringify(message))
               var userName = message.fromUser.username
               if (userName === gitterName) return
 
