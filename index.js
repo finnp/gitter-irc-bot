@@ -31,12 +31,10 @@ module.exports = function (opts) {
     console.error('IRC Error:', message)
   })
 
-  var joinRoomUrl = 'https://api.gitter.im/v1/rooms'
-
   console.log('Connecting to IRC..')
   ircClient.connect(function () {
     log('Connected to IRC, joined ' + opts.ircChannel)
-    request.post({ url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
+    request.post({ url: 'https://api.gitter.im/v1/rooms', headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
       if (err) return log(err)
       var gitterRoomId = json.id
       var postGitterMessageUrl = 'https://api.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
@@ -44,6 +42,7 @@ module.exports = function (opts) {
       request({url: 'https://api.gitter.im/v1/user', headers: headers, json: true}, function (err, res, json) {
         if (err) return log(err)
         var gitterName = json[0].username
+        var gitterUserId = json[0].id
         log('Gitterbot ' + gitterName + ' on channel ' + opts.gitterRoom + '(' + gitterRoomId + ')')
 
         gitter.subscribe('/api/v1/rooms/' + gitterRoomId + '/chatMessages', gitterMessage, {})
@@ -65,6 +64,12 @@ module.exports = function (opts) {
             return '(' + userName + ') ' + line
           }).join('\n')
 
+          // mark message as read by bot
+          request.post({
+            url: 'https://api.gitter.im/v1/user/' + gitterUserId + '/rooms/' + gitterRoomId + '/unreadItems',
+            headers: headers,
+            json: {chat: [ message.id ]}
+          })
           console.log('gitter:', text)
           ircClient.say(opts.ircChannel, text)
         }
