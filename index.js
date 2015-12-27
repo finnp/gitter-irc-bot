@@ -1,9 +1,10 @@
 var irc = require('irc')
 var request = require('request')
 var xtend = require('xtend')
-var JSONStream = require('JSONStream')
+var gitterClient = require('./gitter.js')
 
 module.exports = function (opts) {
+  var gitter = gitterClient(opts.gitterApiKey)
   var headers = {
     'Accept': 'application/json',
     'Authorization': 'Bearer ' + opts.gitterApiKey
@@ -38,53 +39,35 @@ module.exports = function (opts) {
     request.post({ url: joinRoomUrl, headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
       if (err) return log(err)
       var gitterRoomId = json.id
-      var getGitterMessageUrl = 'https://stream.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
       var postGitterMessageUrl = 'https://api.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
 
       request({url: 'https://api.gitter.im/v1/user', headers: headers, json: true}, function (err, res, json) {
         if (err) return log(err)
         var gitterName = json[0].username
         log('Gitterbot ' + gitterName + ' on channel ' + opts.gitterRoom + '(' + gitterRoomId + ')')
-        var chatStream
 
-        function gitterAttach () {
-          if (chatStream) {
-            log('Reattaching to gitter chat stream...')
-            chatStream.abort()
-            chatStream.removeAllListeners()
+        gitter.subscribe('/api/v1/rooms/' + gitterRoomId + '/chatMessages', gitterMessage, {})
+
+        function gitterMessage (data) {
+          if (data.operation !== 'create') return
+          var message = data.model
+          if (!message.fromUser) return
+          var userName = message.fromUser.username
+          if (userName === gitterName) return
+
+          var lines = message.text.split('\n')
+          if (lines.length > 4) {
+            lines.splice(3)
+            lines.push('[full message: https://gitter.im/' + opts.gitterRoom + '?at=' + message.id + ']')
           }
-          chatStream = request({url: getGitterMessageUrl, headers: headers})
-          chatStream.on('error', function (err) {
-            log(err)
-            gitterAttach()
-          })
-          chatStream.on('end', gitterAttach)
-          chatStream.pipe(JSONStream.parse())
-            .on('data', function (message) {
-              if (!message.fromUser) return log(JSON.stringify(message))
-              var userName = message.fromUser.username
-              if (userName === gitterName) return
 
-              var lines = message.text.split('\n')
-              if (lines.length > 4) {
-                lines.splice(3)
-                lines.push('[full message: https://gitter.im/' + opts.gitterRoom + '?at=' + message.id + ']')
-              }
+          var text = lines.map(function (line) {
+            return '(' + userName + ') ' + line
+          }).join('\n')
 
-              var text = lines.map(function (line) {
-                return '(' + userName + ') ' + line
-              }).join('\n')
-
-              console.log('gitter:', text)
-              ircClient.say(opts.ircChannel, text)
-            })
-            .on('error', function (err) {
-              log(err)
-              gitterAttach()
-            })
+          console.log('gitter:', text)
+          ircClient.say(opts.ircChannel, text)
         }
-
-        gitterAttach()
 
         ircClient.on('message' + opts.ircChannel, function (from, message) {
           if (from === opts.ircNick) return
@@ -100,13 +83,9 @@ module.exports = function (opts) {
         ircClient.on('pm', function (from, message) {
           if (from !== opts.ircAdmin) return ircClient.say('Your are not my master.')
           var commands = [
-            'reattach gitter',
             'kill'
           ]
           if (message === commands[0]) {
-            gitterAttach()
-            ircClient.say(from, 'I reattached gitter for you!')
-          } else if (message === commands[1]) {
             ircClient.say(from, 'Shutting down systems...')
             process.exit()
           } else {
