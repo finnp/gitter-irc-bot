@@ -16,11 +16,11 @@ You need to set the following env variables
 * `GITTERBOT_GITTER_ROOM` The Gitter Room, e.g. `datproject/discussions`
 * `GITTERBOT_IRC_CHANNEL` IRC Channel name, e.g. `#dat`
 * `GITTERBOT_IRC_NICK` The IRC user nick of the bot
-* `GITTERBOT_IRC_ADMIN` If specified this person receives error logs via pm.
 
 The following options are optional:
 * `GITTERBOT_IRC_SERVER` IRC Server name, e.g. `irc.freenode.net`
 * `GITTERBOT_IRC_OPTS` JSON string with options passed to [node-irc](https://node-irc.readthedocs.org/en/latest/API.html)
+* `GITTERBOT_IRC_ADMIN` If specified this person receives error logs via pm.
 
 Then start the bot with `npm start`, or if you install globally run `gitter-irc-bot`.
 
