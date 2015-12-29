@@ -75,13 +75,13 @@ module.exports = function (opts) {
         }
 
         ircClient.on('message' + opts.ircChannel, function (from, message) {
-          if (from === opts.ircNick) return
+          if (from === ircClient.nick) return
           var text = '`' + from + '` ' + message
           console.log('irc:', text)
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('action', function (from, to, message) {
-          if (to !== opts.ircChannel || from === opts.ircNick) return
+          if (to !== opts.ircChannel || from === ircClient.nick) return
           var text = '— `' + from + '` ' + message
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
