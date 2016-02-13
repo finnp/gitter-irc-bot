@@ -3,7 +3,7 @@ var request = require('request')
 var xtend = require('xtend')
 var gitterClient = require('./gitter.js')
 
-function pad (name) {
+function escapeName (name) {
   var t = '`'
   while (name.indexOf(t) >= 0) t += '`'
   return t + ' ' + name + ' ' + t
@@ -82,13 +82,13 @@ module.exports = function (opts) {
 
         ircClient.on('message' + opts.ircChannel, function (from, message) {
           if (from === ircClient.nick) return
-          var from = pad(from), text = from + ' ' + message
+          var text = escapeName(from) + ' ' + message
           console.log('irc:', text)
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('action', function (from, to, message) {
           if (to !== opts.ircChannel || from === ircClient.nick) return
-          var from = pad(from), text = '— ' + from + ' ' + message
+          var text = '— ' + escapeName(from) + ' ' + message
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('pm', function (from, message) {
