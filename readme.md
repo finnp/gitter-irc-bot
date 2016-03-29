@@ -24,6 +24,15 @@ The following options are optional:
 
 Then start the bot with `npm start`, or if you install globally run `gitter-irc-bot`.
 
+### Authentication
+
+To authenticate to the IRC server, you will need to supply `password` in `GITTERBOT_IRC_OPTS`.
+For example: `GITTERBOT_IRC_OPTS='{"password": "hunter2"}'`.
+
+Using SASL is recommended if the IRC server supports it. You can enable it by supplying
+`"sasl": true` and the appropriate `userName`.
+Example: `GITTERBOT_IRC_OPTS='{"userName": "gitter-example", "password": "hunter2", "sasl": true}'`
+
 ## Deploy on heroku
 
 When deploying to heroku you need to set `HEROKU_URL` to the url of your heroku app.
