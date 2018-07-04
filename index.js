@@ -42,6 +42,10 @@ module.exports = function (opts) {
     log('Connected to IRC, joined ' + opts.ircChannel)
     request.post({ url: 'https://api.gitter.im/v1/rooms', headers: headers, json: {uri: opts.gitterRoom} }, function (err, req, json) {
       if (err) return log(err)
+      if (json.error) {
+        return log('Error while communicating with the gitter API: ' + json.error);
+      }
+
       var gitterRoomId = json.id
       var postGitterMessageUrl = 'https://api.gitter.im/v1/rooms/' + gitterRoomId + '/chatMessages'
 
