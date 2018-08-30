@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./bin.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard ."
   },
   "bin": {
     "gitter-irc-bot": "./bin.js"
@@ -18,7 +18,9 @@
     "request": "^2.67.0",
     "xtend": "^4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard": "^12.0.1"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/finnp/gitter-irc-bot"
